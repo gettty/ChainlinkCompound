@@ -1,0 +1,50 @@
+<html>
+  <head>
+  	<title>Price Feeds</title>
+  	<meta charset="UTF-8">	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+	<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script>
+      $(document).ready(function(){
+    	 var baseurl = "http://127.0.0.1:5500/prices/";
+    	 var xmlhttp = new XMLHttpRequest();
+    	 xmlhttp.open("GET",baseurl+"/data",true);
+    	 xmlhttp.onreadystatechange = function(){
+    		 if(xmlhttp.readyState==4 && xmlhttp.status ==200){
+    			 var prices = JSON.parse(xmlhttp.responseText);
+    			 $("#example").DataTable({
+    				data:prices,
+    				"columns":[
+                        {'data': "id"},
+    					{'data':"Coin"},
+    					{'data':"Source"},
+    					{'data':"Price"},
+    				]
+    			 });
+    		 } else {console.log("something failed")}
+    	 };
+    	 xmlhttp.send();
+      });
+    </script>  
+  </head>
+  <body>
+    <table id="example" class="display" style="width:100%">
+    <thead>
+	    <tr>
+            <th>Id</th>
+	        <th>Coin</th>
+	        <th>Source</th>
+	        <th>Price</th>
+	    </tr>
+    </thead>
+    <tfoot>
+	    <tr>
+            <th>Id</th>
+	        <th>Coin</th>
+	        <th>Source</th>
+	        <th>Price</th>
+	    </tr>
+    </tfoot>
+    </table>
+  </body>
+</html>
