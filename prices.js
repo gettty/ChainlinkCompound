@@ -6,6 +6,7 @@ const app = express()
 const network = "homestead";
 const BigNumber = require('bignumber.js');
 const provider = new ethers.providers.JsonRpcProvider(process.env.provider);
+let blockNum = 0;
 
 const proposedUAV = '0x841616a5CBA946CF415Efe8a326A621A794D0f97';
 const proposedUAVabi = JSON.parse(fs.readFileSync("proposedUAVabi.json"));
@@ -116,18 +117,27 @@ async function getChainlinkprices (){
     return text
 }
 
+async function getBlockNumber (){
+    blockNum = await provider.blockNumber;
+    return blockNum
+}
+let packet;
 async function getPrices(){
-    let proposedInfoReturn = await getProposedUAVprices();
-    let currentInfoReturn = await getCurrentUAVprices();
-    let chainlinkInfoReturn = await getChainlinkprices();
-    let packet = JSON.stringify(dataSet);
-    app.use(express.static('static'))
-    app.get('/prices/data', (req, res) => {
-        res.send(packet)
-    })
-    app.listen(3000, () => console.log('Server ready'))
+    await Promise.all([getProposedUAVprices(),getCurrentUAVprices(),getChainlinkprices(),getBlockNumber()])
+    packet = JSON.stringify(dataSet)
+    return console.log('got prices')
 }
 
 getPrices();
-
+app.use(express.static('static'))
+app.get('/prices/data', (req, res) => {
+    res.send(packet)
+})
+app.get('/prices/update', async (req, res) => {
+    const host = req.get('host');
+    if (host == urhost){
+    await getPrices();
+    }
+    })
+app.listen(3000, () => console.log('Server ready'))
 

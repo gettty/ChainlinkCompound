@@ -9,13 +9,13 @@
 			(prices)=> {
 				var info = JSON.parse(prices)
 				console.log(info)
-				console.log(prices)
 				$("#example").DataTable({
+					"paging": false,
     				data:info,
     				"columns":[
-    					{'data':"Coin"},
-    					{'data':"Source"},
-    					{'data':"Price"},
+    					{title:"Coin"},
+    					{title:"Source"},
+    					{title:"Price"},
     				]
     			 });
 			})
