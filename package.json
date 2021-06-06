@@ -1,0 +1,19 @@
+{
+  "name": "chainlinkcompound",
+  "version": "1.0.0",
+  "description": "price feed aggregator",
+  "main": "prices.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gettty/ChainlinkCompound.git"
+  },
+  "author": "Getty Hill",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gettty/ChainlinkCompound/issues"
+  },
+  "homepage": "https://github.com/gettty/ChainlinkCompound#readme"
+}
