@@ -21,7 +21,7 @@ const reporterabi = JSON.parse(fs.readFileSync("reporterabi.json"));
 const chainlinkOralceabi = JSON.parse(fs.readFileSync("chainlinkOracleabi.json"));
 let chainlinkInfo = {};
 
-let dataSet = {};
+let dataSet = [];
 
 let markets = {
 '0x0000000000000000000000000000000000000000': 'ETH',
@@ -68,7 +68,9 @@ async function getProposedUAVprices (){
         let price = new BigNumber((await proposedUAVcontract.getUnderlyingPrice(config["cToken"])).toString()).div(mantissa[config['underlying']]);
         proposedInfo[i] = {'cToken': config['cToken'],'underlying': config['underlying'],'price':price}
         text = text + "\n"+markets[proposedInfo[i]["underlying"]]+": "+ price;
-        dataSet[Object.keys(dataSet).length+1] ={'coin': markets[proposedInfo[i]["underlying"]],'source':'Proposed', 'price':price}
+        //dataSet[Object.keys(dataSet).length+1] ={'coin': markets[proposedInfo[i]["underlying"]],'source':'Proposed', 'price':price}
+        dataSet.push([markets[proposedInfo[i]["underlying"]],'Proposed',price])
+
     }
     return text
 }
@@ -81,7 +83,8 @@ async function getCurrentUAVprices (){
         let price = new BigNumber((await currentUAVcontract.getUnderlyingPrice(config["cToken"])).toString()).div(mantissa[config['underlying']]);
         currentInfo[i] = {'cToken': config['cToken'],'underlying': config['underlying'],'price':price}
         text = text + "\n"+markets[currentInfo[i]["underlying"]]+": "+ price;
-        dataSet[Object.keys(dataSet).length+1] ={'coin': markets[currentInfo[i]["underlying"]],'source':'Current', 'price':price}
+        //dataSet[Object.keys(dataSet).length+1] ={'coin': markets[currentInfo[i]["underlying"]],'source':'Current', 'price':price}
+        dataSet.push([markets[currentInfo[i]["underlying"]],'Current',price])
     }
     return text
 }
@@ -107,7 +110,8 @@ async function getChainlinkprices (){
         //console.log(price);
         chainlinkInfo[i] = {'cToken': config['cToken'],'underlying': config['underlying'],'price':price}
         text = text + "\n"+markets[chainlinkInfo[i]["underlying"]]+": "+ price;
-        dataSet[Object.keys(dataSet).length+1] ={'coin': markets[chainlinkInfo[i]["underlying"]],'source':'Chainlink', 'price':price}
+        //dataSet[Object.keys(dataSet).length+1] ={'coin': markets[chainlinkInfo[i]["underlying"]],'source':'Chainlink', 'price':price}
+        dataSet.push([markets[chainlinkInfo[i]["underlying"]],'Chainlink',price])
     }
     return text
 }
@@ -117,10 +121,11 @@ async function getPrices(){
     let currentInfoReturn = await getCurrentUAVprices();
     let chainlinkInfoReturn = await getChainlinkprices();
     let packet = JSON.stringify(dataSet);
+    app.use(express.static('static'))
     app.get('/prices/data', (req, res) => {
         res.send(packet)
     })
-    app.listen(5500,'127.0.0.1', () => console.log('Server ready'))
+    app.listen(3000, () => console.log('Server ready'))
 }
 
 getPrices();
