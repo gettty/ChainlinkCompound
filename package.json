@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/gettty/ChainlinkCompound/issues"
   },
-  "homepage": "https://github.com/gettty/ChainlinkCompound#readme"
+  "homepage": "https://github.com/gettty/ChainlinkCompound#readme",
+  "dependencies": {
+    "bignumber.js": "^9.0.1",
+    "dotenv": "^10.0.0",
+    "ethers": "^5.3.0",
+    "express": "^4.17.1"
+  }
 }
