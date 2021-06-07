@@ -6,12 +6,13 @@
 	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script>
         $.get('/prices/data').done(
-			(prices)=> {
-				var info = JSON.parse(prices)
-				console.log(info)
+			(info)=> {
+				//var infoParse = JSON.parse(info)
+				//console.log(infoParse)
+				document.getElementById("block").innerHTML = "Block number: "+info['blockNumber'];
 				$("#example").DataTable({
 					"paging": false,
-    				data:info,
+    				data:info['prices'],
     				"columns":[
     					{title:"Coin"},
     					{title:"Source"},
@@ -22,6 +23,7 @@
     </script>  
   </head>
   <body>
+	<h2 id="block"></h2>
     <table id="example" class="display" style="width:100%">
     <thead>
 	    <tr>

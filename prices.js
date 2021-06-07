@@ -117,27 +117,31 @@ async function getChainlinkprices (){
     return text
 }
 
-async function getBlockNumber (){
-    blockNum = await provider.blockNumber;
-    return blockNum
-}
 let packet;
 async function getPrices(){
-    await Promise.all([getProposedUAVprices(),getCurrentUAVprices(),getChainlinkprices(),getBlockNumber()])
-    packet = JSON.stringify(dataSet)
+    await Promise.all([getProposedUAVprices(),getCurrentUAVprices(),getChainlinkprices()])
+    packet = {'prices':dataSet,'blockNumber': await provider.getBlockNumber()}
+    //packet = JSON.stringify({'prices':dataSet,'blockNumber': await provider.getBlockNumber()})
     return console.log('got prices')
 }
+
+async function update(){
+    await getPrices();
+    app.get('/prices/data', (req, res) => {
+        res.send(packet)
+    })
+}
+
+setInterval( async ()=>{
+    await update();
+    },1000*60*10
+)
 
 getPrices();
 app.use(express.static('static'))
 app.get('/prices/data', (req, res) => {
     res.send(packet)
 })
-app.get('/prices/update', async (req, res) => {
-    const host = req.get('host');
-    if (host == urhost){
-    await getPrices();
-    }
-    })
+
 app.listen(3000, () => console.log('Server ready'))
 
