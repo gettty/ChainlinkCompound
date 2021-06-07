@@ -129,6 +129,7 @@ async function update(){
     await getPrices();
     app.get('/prices/data', (req, res) => {
         res.send(packet)
+        dataSet = [];
     })
 }
 
@@ -141,6 +142,7 @@ getPrices();
 app.use(express.static('static'))
 app.get('/prices/data', (req, res) => {
     res.send(packet)
+    dataSet = [];
 })
 
 app.listen(3000, () => console.log('Server ready'))
