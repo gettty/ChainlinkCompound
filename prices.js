@@ -119,6 +119,7 @@ async function getChainlinkprices (){
 
 let packet;
 async function getPrices(){
+    dataSet = [];
     await Promise.all([getProposedUAVprices(),getCurrentUAVprices(),getChainlinkprices()])
     packet = {'prices':dataSet,'blockNumber': await provider.getBlockNumber()}
     //packet = JSON.stringify({'prices':dataSet,'blockNumber': await provider.getBlockNumber()})
@@ -129,8 +130,6 @@ async function update(){
     await getPrices();
     app.get('/prices/data', (req, res) => {
         res.send(packet)
-        dataSet = [];
-        packet = {};
     })
 }
 
