@@ -130,6 +130,7 @@ async function update(){
     app.get('/prices/data', (req, res) => {
         res.send(packet)
         dataSet = [];
+        packet = {};
     })
 }
 
